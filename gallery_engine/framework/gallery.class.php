@@ -130,7 +130,7 @@ class Gallery extends BaseClass
 			$pic->loadData( array(
 				'url'									=> $url_data['url'],
 				'thumb_url'						=> $url_data['thumb_url'],
-				'chached_url'					=> $url_data['chached_url'],
+				'cached_url'					=> $url_data['cached_url'],
 				'relative_url'				=> Url::getRelative( $image_properties['path'] ),
 				'relative_path_only'	=> Url::getRelativeWithoutFile( $image_properties['path'], $file_name ),
 				'url_access_name'			=> $this->getConfig()->url_item_name

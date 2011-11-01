@@ -60,17 +60,33 @@ class Dispatcher extends BaseClass
 		return $output;
 	}
 
+	public function runItem()
+	{
+		// Before anything, we have to obtaing the absolute path of the received relative.
+		$this->_params['item'] = Url::refillRelativePath( $this->_params['item'], $this->getConfig() );
+		$element	= new Element( $this->getConfig(), $this->_params['item'] );
+		$output		= $element->getContent();
+		unset( $item );
+
+		return $output;
+	}
+
 	public function run()
 	{
 		try
 		{
 			// Parse URL
 			$this->_params = Url::parseUrl( $_GET );
+			
 			switch( $this->_params['type'] )
 			{
 				case 'folder':
 					header( 'Content-Type: text/html; charset=UTF-8' );
 					print $this->runGallery();
+					break;
+				case 'item':
+					header( 'Content-Type: text/html; charset=UTF-8' );
+					print $this->runItem();
 					break;
 			}
 		}
