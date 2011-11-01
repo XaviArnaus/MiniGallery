@@ -1,0 +1,303 @@
+/*  
+Theme Name: Pixeled
+Theme URI: http://samk.ca/freebies/free-wordpress-theme-pixeled/
+Description: Dark WP theme with 2-3 column layout, dropdown categories menu, multiple widget-ready placement and feedburner email form integrated, easy to customize. Created by <a href="http://samk.ca/">samk</a>. Enjoy!
+Author: sam
+Author URI: http://samk.ca/
+Version: 1.9.2
+Tags: black, blue, three-columns, two-columns, threaded-comments, fixed-width, theme-options, right-sidebar
+.
+Released under the <a href="http://www.opensource.org/licenses/gpl-license.php">GPL</a>.
+.
+*/
+
+/* Defaults */
+
+* {
+  margin: 0;
+  padding: 0;
+  }
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  padding: 10px 0 10px 0;
+  }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Verdana;
+  }
+
+hr {
+  color: #333;
+  border: 1px solid #121212;
+  }
+
+pre {
+  height: auto; 
+  overflow-x:scroll;
+  }
+
+fieldset {
+  margin: 0;
+  padding: 0; 
+  border: 0;
+  }
+
+dd {
+  padding-left: 15px;
+  }
+
+
+p {
+  font-size: 9pt;
+  }
+
+a {
+  color: #cccccc;
+  text-decoration: underline;
+  }
+
+a:hover {
+  color: #cccccc;
+  text-decoration: underline;
+  }
+
+a img {
+  border: none;  
+  }
+
+blockquote {
+  background: #070707;
+  border: 1px solid #060606;
+  padding: 5px 15px;
+  margin: 10px 10px 5px 15px;
+  font-style: italic;
+  color: #fff;
+  }
+
+code {
+  color: #3366cc;
+  font-style: italic;
+  }
+
+strong {
+  font-size: 110%;
+  }
+
+body {
+  text-align: center;
+  margin: 0;
+  padding: 0 0 15px 0;
+  font-family: trebuchet ms, arial, helvetica, sans-serif;
+  background: #000 url(../images/bg_pixeled_back.jpg) top center no-repeat;
+  background-attachment: fixed;
+  }
+
+#in_body
+{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100px;
+  background: url(../images/bg_pixeled_front_cut.png) top center no-repeat;
+}
+
+
+/* Header and wrapper */
+#wrapper {
+  margin: 0 auto;
+  width: 963px;
+  text-align: left;
+  padding: 0;
+  }
+
+#header {
+  padding: 0;
+  margin: 0;
+  height: 80px;
+  }
+
+#header #topright {
+  text-align: right;
+  float: right;
+  width: 600px;
+  margin: 5px 0 0 0;
+}
+#header #topright ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  }
+#header #topright li {
+  display: inline;
+  }
+#header #topright li a {
+  color: #fff;
+  font-size: 9pt;
+  padding: 0 0 0 25px;
+  /*text-transform: lowercase;*/
+  }
+#header #topright li a:hover {
+  color: #000;
+  text-decoration: none;
+  }
+
+#header #logo {
+  float: left;
+  width: 350px;
+  margin: 25px 0 0 0;
+  padding: 0;
+}
+#header h1 {
+  padding: 0;
+  margin: 0;
+  }
+#header h1 a {
+  color: #fff;
+  font-size: 17pt;
+  text-decoration: none;
+  }
+#header h1 a:hover {
+  color: #eee;
+  text-decoration: none;
+  }
+#header span {
+  padding: 0;
+  color: #cccccc;
+  font-size: 11pt;
+  }
+
+#main-container
+{
+	margin: 0 auto;
+	border: 1px solid white;
+	background: url(../images/bg-trans.png) repeat;
+  padding: 5px;
+	width: 800px;
+	height: 500px;
+}
+#main-container h2
+{
+	color: #cccccc;
+	margin-left: 5px;
+	text-align: left;
+}
+
+#content-head
+{
+	width: 800px;
+	height: 25px;
+	border-bottom: 1px solid white;
+	color: white;
+}
+#content-head p
+{
+	list-style: none;
+	margin: 0;
+  padding: 0;
+}
+
+.gallery-container
+{
+	width: 100%;
+}
+
+.gallery-item
+{
+	float: left;
+	margin: 5px;
+}
+
+.gallery-item img
+{
+	border: 1px solid white;
+	padding: 1px;
+}
+
+
+
+
+#social-content
+{
+	margin: 0 auto;
+
+	background: black;
+	width: 800px;
+	height: 200px;
+	padding: 5px;
+	color: #cccccc;
+	text-align: left;
+	font-size: 10pt;
+}
+
+#social-content #social-header
+{
+	margin: 5px;
+	font-size: 10pt;
+}
+
+#social-content .column
+{
+	margin: 5px;
+	float:left;
+	width: 200px;
+	height: 100%;
+}
+
+#social-content .column h3
+{
+	font-size: 10pt;
+}
+
+#social-content .column ul
+{
+	margin: 0;
+  padding: 0;
+}
+
+#social-content .column li
+{
+	margin: 0 10px 0 20px;
+  padding: 0;
+}
+
+#social-content .column a
+{
+	color: #cccccc;
+	text-decoration: none;
+}
+
+#social-content .last
+{
+	float:right;
+}
+
+.moto-description
+{
+	margin: 5px;
+	color: #cccccc;
+	text-align: left;
+}
+
+.moto-logo
+{
+	margin: 5px;
+	padding: 2px;
+	border: 1px solid white;
+	margin: 0 auto;
+}
+
+.li-button
+{
+	cursor: pointer;
+}
+
+.clearfix
+{
+	clear: both;
+}
+
+.sections
+{
+	
+}
