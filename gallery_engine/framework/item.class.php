@@ -5,11 +5,22 @@
 class Item
 {
 	protected $slug = null;
+	protected $title;
+	protected $filename;
+
+	protected $url_access_name;
+	protected $relative_url;
 	protected $url;
 	protected $path;
-	protected $path_alone;
+
+	protected $thumb_path;
+	protected $thumb_url;
+	protected $thumb_relative_url;
+	protected $cached_path;
 	protected $cached_url;
-	protected $title;
+	protected $cached_relative_url;
+	
+	protected $relative_path_only;
 
 	public function __construct( $slug = null )
 	{
@@ -24,6 +35,58 @@ class Item
 		}
 	}
 
+	public function getFileName()
+	{
+		return $this->filename;
+	}
+	public function getUrlAccessName()
+	{
+		return $this->url_access_name;
+	}
+
+	public function getThumbUrl( $relative = false )
+	{
+		if ( $relative )
+		{
+			return $this->thumb_relative_url;
+		}
+		return $this->thumb_url;
+	}
+	public function getCachedUrl( $relative = false )
+	{
+		if ( $relative )
+		{
+			return $this->cached_relative_url;
+		}
+		return $this->cached_url;
+	}
+	public function getRealUrl( $relative = false )
+	{
+		if ( $relative )
+		{
+			return $this->relative_url;
+		}
+		return $this->url;
+	}
+
+	public function getPath()
+	{
+		return $this->path;
+	}
+	public function getProfilePath( $profile )
+	{
+		return $this->{$profile . '_path'};
+	}
+
+	public function getRelativePathOnly()
+	{
+		if ( is_null( $this->relative_path_only) )
+		{
+			$this->relative = Url::getRelativeWithoutFile( $this->path, $this->filename );
+		}
+		return $this->relative_path_only;
+	}
+
 	public function getSlug()
 	{
 		if ( is_null( $this->slug ) )
@@ -36,16 +99,6 @@ class Item
 	public function getTitle()
 	{
 		return $this->title;
-	}
-
-	public function getUrl( $cached = true )
-	{
-		return ( $cached ? $this->cached_url : $this->url );
-	}
-
-	public function getPath()
-	{
-		return $this->path;
 	}
 }
 ?>

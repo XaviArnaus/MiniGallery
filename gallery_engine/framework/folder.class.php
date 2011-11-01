@@ -4,9 +4,13 @@
  */
 class Folder extends Item
 {
-	protected $dirname;
+	protected $icon_url;
 
-	public function printRawIcon()
+	public function getIconUrl()
+	{
+		return $this->icon_url;
+	}
+	public function printRawIcon() // UNUSED
 	{
 			$icon_folder  = 'R0lGODlhLwAvAPcAAHRwZnRwcHlwRnl2e3l8e39wMX98e3+ChoVwMYVwO4WChoWIhotwMYt2Jot8RouI';
 			$icon_folder .= 'houOkJF2JpGOkJGUkJd2Jpd8JpeUkJeUm518G52IO52bm52hm6OCG6OUZqOhpqmCEamIG6mnpqmtsK+I';

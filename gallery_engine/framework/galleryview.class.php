@@ -18,14 +18,20 @@ class GalleryView extends BaseClass
 		// Start walking all the items.
 		$content = '';
 		// First add all the folders.
-		foreach( $folder_data as $folder )
+		if ( is_array( $folder_data ) && count( $folder_data ) > 0 )
 		{
-			$content.= self::getFolderOutput( $folder, $config );
+			foreach( $folder_data as $folder )
+			{
+				$content.= self::getFolderOutput( $folder, $config );
+			}
 		}
 		// Now add all the pics.
-		foreach( $pic_data as $pic )
+		if ( is_array( $pic_data ) && count( $pic_data ) > 0 )
 		{
-			$content.= self::getPicOutput( $pic, $config );
+			foreach( $pic_data as $pic )
+			{
+				$content.= self::getPicOutput( $pic, $config );
+			}
 		}
 		// Now get the gallery main template with all the content.
 		$content = self::getGalleryOutput( $content, $config );
@@ -60,6 +66,7 @@ class GalleryView extends BaseClass
 		$pic_template = new Template( 'gallery_item', $config );
 
 		// Assignments.
+		$pic_template->assign( 'item_url', Url::itemLink( $item, $config ) );
 		$pic_template->assign( 'thumb_name', $item->getSlug() );
 		$pic_template->assign( 'thumb_src', $item->getThumbUrl() );
 
@@ -82,9 +89,9 @@ class GalleryView extends BaseClass
 		{
 			$slug = '..';
 		}
-		$pic_template->assign( 'item_url', $config->gallery_url . '?moveto=' . $item->getPath()  );
+		$pic_template->assign( 'item_url', Url::itemLink( $item, $config ) );
 		$pic_template->assign( 'thumb_name', $slug );
-		$pic_template->assign( 'thumb_src', $item->getUrl( false ) );
+		$pic_template->assign( 'thumb_src', $item->getIconUrl() );
 
 		// Fetch and destroy the template object.
 		$output = $pic_template->fetch();

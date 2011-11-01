@@ -101,7 +101,42 @@ class ImageHelper extends ImageResizer
 				$dir_target	= $config->getCachedFolder();
 				break;
 		}
-		return $dir_target . DIR_SEPARATOR . self::getCleanName( $pic->getPathAlone() ) . '_' . self::getCleanName( $pic->getFileName() );
+		return $dir_target . DIR_SEPARATOR . self::getCleanName( $pic->getRelativePathOnly() ) . '_' . self::getCleanName( $pic->getFileName() );
+	}
+
+	public static function getImageType( $pic )
+	{
+		switch( $pic->getMimeType() )
+		{
+			case 'image/png':
+				return 'png';
+			case 'image/jpeg':
+			case 'image/pjpeg':
+				return 'jpg';
+			case 'image/gif':
+				return 'gif';
+			case 'image/bmp':
+			case 'image/x-windows-bmp':
+				return 'bmp';
+		}
+
+		// So Mime types are not enough? 
+		if (strtolower(substr($file, strlen($file)-3)) == 'jpg' || strtolower(substr($file, strlen($file)-4)) == 'jpeg')
+		{
+			return 'jpg';
+		}
+		else if (strtolower(substr($file, strlen($file)-3)) == 'gif')
+		{
+			return 'gif';
+		}
+		else if (strtolower(substr($file, strlen($file)-3)) == 'png')
+		{
+			return 'png';
+		}
+		else if (strtolower(substr($file, strlen($file)-3)) == 'bmp')
+		{
+			return 'bmp';
+		}
 	}
 
 	// Valid profiles: 'thumb', 'cached'
@@ -129,7 +164,7 @@ class ImageHelper extends ImageResizer
 			FileSystem::createFolderIfNotExist( $dir_target );
 
 			// Generate the thumbnail/cache
-			parent::resizeImage( $file_origin, $img_height, $waterMark, $config->image_quality, $file_target );
+			parent::resizeImage( $file_origin, self::getImageType( $pic ), $img_height, $waterMark, $config->image_quality, $file_target );
 		}
 	}
 }

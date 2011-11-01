@@ -19,6 +19,8 @@ class Config
 	public $gallery_thumbs_folder		= 'thumbs';
 	public $gallery_cached_folder		= 'cached';
 	public $gallery_xml_folder			= 'xml';
+	public $url_folder_name					= 'folder';
+	public $url_item_name						= 'item';
 	public $banned_folders					= array('gallery_engine');
 	public $thumb_forced_width			= 128;		// Only numbers. Height autocalculated.
 	public $cached_forced_width			= 600;		// Only numbers. Height autocalculated.
@@ -28,33 +30,12 @@ class Config
 
 	public function __construct( $config_file )
 	{
-		$this->gallery_url = $this->_discoverCleanURL();
+		$this->gallery_url = Url::discoverCleanURL();
 
 		if ( !is_null( $config_file ) )
 		{
 			$this->load( $config_file );
 		}
-	}
-
-	private function _discoverCleanURL()
-	{
-		// Data about the URL
-		$self_pieces	= explode( '/', $_SERVER['PHP_SELF'] );
-		$last_piece		= $self_pieces[count( $self_pieces )-1];
-		// Data about the ScriptFile
-		$scr_pieces		= explode( '/', $_SERVER['SCRIPT_FILENAME'] );
-		$script_name	= $scr_pieces[count( $scr_pieces )-1];
-		// If self contanins the script file clean it.
-		if ( strpos( $_SERVER['PHP_SELF'], $script_name ) > -1 )
-		{
-			$post_domain = substr( $_SERVER['PHP_SELF'], 0, -(strlen( $script_name )) );
-		}
-		else
-		{
-			$post_domain = $_SERVER['PHP_SELF'];
-		}
-		return 'http://' . $_SERVER['HTTP_HOST'] . $post_domain;
-		
 	}
 
 	public function getThumbnailsFolder()

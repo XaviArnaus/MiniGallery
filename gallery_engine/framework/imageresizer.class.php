@@ -4,26 +4,26 @@
  */
 class ImageResizer
 {
-	public static function resizeImage($file, $img_height, $waterMark, $image_quality = 70, $filename = null )
+	public static function resizeImage($file, $img_type, $img_height, $waterMark, $image_quality = 70, $filename = null )
 	{
 		// Getting the image temp.
-		if (strtolower(substr($file, strlen($file)-3)) == 'jpg')
+		if ($img_type == 'jpg')
 		{
 			$img_temp = imagecreatefromjpeg($file);
 		}
-		else if (strtolower(substr($file, strlen($file)-3)) == 'gif')
+		else if ($img_type == 'gif')
 		{
 			$img_temp = imagecreatefromgif($file);
 		}
-		else if (strtolower(substr($file, strlen($file)-3)) == 'png')
+		else if ($img_type == 'png')
 		{
 			$img_temp = imagecreatefrompng($file);
 		}
-		else if (strtolower(substr($file, strlen($file)-3)) == 'bmp')
+		else if ($img_type == 'bmp')
 		{
 			$img_temp = imagecreatefrombmp($file);
 		}
-		
+
 		// Get the proportions for the Thumb.
 		$image_temp = array(
 			'x'	=> imagesx( $img_temp ),

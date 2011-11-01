@@ -13,7 +13,6 @@ class FileSystem
 	// Caution: this is recursive.
 	public static function getAlbumTree( $base_path, $config, $only_current_level = true )
 	{
-
 		// Adquiring the params.
 		$include_back_folder	= $config->include_back_folder;
 		$valid_extensions			= $config->valid_extensions;
@@ -26,7 +25,7 @@ class FileSystem
 		$tree['files'] = array();
 		$tree['dirs'] = array();
 		// Should we add the BACK folder?
-		if( $include_back_folder 	) $tree['dirs'][]= $base_path . DIR_SEPARATOR . '..';
+		if( $include_back_folder ) $tree['dirs'][]= $base_path . DIR_SEPARATOR . '..';
 		// Walk all the files/dirs here.
 		while ($f = readdir($dir_handle))
 		{
@@ -40,7 +39,7 @@ class FileSystem
 					$tree['files'][]= $base_path. DIR_SEPARATOR . $f;
 				}
 				// Is this a directory?
-				if( is_dir( $base_path. DIR_SEPARATOR . $f ) )
+				if( is_dir( $base_path. DIR_SEPARATOR . $f ) && !self::isBannedDir( $f, $config ) )
 				{
 					// Add it to the array
 					$tree['dirs'][]= $base_path. DIR_SEPARATOR . $f;
@@ -66,7 +65,7 @@ class FileSystem
 				}
 			}
 		}
-		
+
 		ksort($tree['files']);
 		reset($tree['files']);
 		closedir($dir_handle);
@@ -74,28 +73,24 @@ class FileSystem
 		return $tree;
 	}
 
-	public static function discoverUrl( $item, $config )
+	public static function isBannedDir( $current_dir, $config )
 	{
-		// Expecting that the Pic path is absolute, so we compare with the gallery user defined path.
-		$pos = strpos( $item->getPath(), $config->gallery_path );
-		if ( false === $pos )
+		$banned_dirs = $config->banned_folders;
+		// First let us know if this folder starts with a dot (so should be hidden)
+		if ( '.' === $current_dir[0] && '..' !== $current_dir )
 		{
-			throw new Error( 'The path defined for the gallery and the file path does not match' );
+			return true;
 		}
-		if ( $pos > 0 )
+		// Now let's see the list of banned dirs
+		foreach( $banned_dirs as $banned )
 		{
-			throw new Error( 'We were expecting absolute paths!' );
+			if ( $current_dir === $banned )
+			{
+				return true;
+			}
 		}
-		$length								= strlen( $config->gallery_path );
-		$result = array(
-			'url'	=> $config->gallery_url . substr( $item->getPath(), $length + 1 )
-		);
-		if ( $item instanceof Pic )
-		{
-			$result['thumb_url']	= $config->gallery_url . substr( $item->getProfilePath( 'thumb' ), $length + 1 );
-			$result['cached_url']	= $config->gallery_url . substr( $item->getProfilePath( 'cached' ), $length + 1 );
-		}
-		return $result;
+		// Not found
+		return false;
 	}
 
 	public static function createFolderIfNotExist( $folder )
@@ -108,15 +103,6 @@ class FileSystem
 		{
 			throw new Error( "Can not create the directory '" . $folder . "'. Check the permissions!" );
 		}
-	}
-
-	public static function getRelativePathAlone( $path, $filename )
-	{
-		// Convert absolute to relative.
-		$path = str_replace( BASE_DIR, '', $path );
-		// Get only the relative path
-		$pos = strpos( $path, $filename );
-		return substr( $path, 0, - ( strlen( $filename ) ) );
 	}
 
 	// Unused

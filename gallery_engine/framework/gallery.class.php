@@ -11,13 +11,13 @@ class Gallery extends BaseClass
 		return $this->html_content;
 	}
 
-	public function __construct( Config $config )
+	public function __construct( Config $config, $folder_to_parse = '' )
 	{
 		// Inyect the config.
 		$this->_config = $config;
 
 		// Get the full tree (photos and dirs)
-		$file_data = $this->_getFiles();
+		$file_data = $this->_getFiles( $folder_to_parse );
 
 		// Generate the objects collection
 		$pic_array 			= $this->_generatePicCollection( $file_data['files'] );
@@ -51,12 +51,9 @@ class Gallery extends BaseClass
 	
 			// Pack Image Data.
 			$image_properties = array(
-				'path'					=> $this->getConfig()->gallery_path . DIR_SEPARATOR .
-														$this->getConfig()->gallery_folder . DIR_SEPARATOR .
-														$this->getConfig()->template_folder . DIR_SEPARATOR .
-														$this->getConfig()->template_images_folder . DIR_SEPARATOR . 'folder.png',
+				'path'					=> $file_item_path,
 				'title'					=> ImageHelper::getCleanName( $file_name ),
-				'dirname'				=> $dir_name
+				'filename'			=> $dir_name
 			);
 
 			// Instantiate Object
@@ -64,9 +61,19 @@ class Gallery extends BaseClass
 			$folder->loadData( $image_properties );
 
 			// Add extra data
-			$url_data = FileSystem::discoverUrl( $folder, $this->getConfig() );
+			$icon_path	= $this->getConfig()->gallery_path . DIR_SEPARATOR .
+										$this->getConfig()->gallery_folder . DIR_SEPARATOR .
+										$this->getConfig()->template_folder . DIR_SEPARATOR .
+										$this->getConfig()->template_images_folder . DIR_SEPARATOR . 'folder.png';
+			$url_data		= Url::discoverPicUrls( $folder, $this->getConfig() );
 			$folder->loadData( array(
-				'url'	=>	$url_data['url']
+				'url'									=> $url_data['url'],
+				'thumb_url'						=> $url_data['url'],
+				'chached_url'					=> $url_data['url'],
+				'relative_url'				=> Url::getRelative( $image_properties['path'] ),
+				'relative_path_only'	=> Url::getRelative( $image_properties['path'] ),
+				'icon_url'						=> Url::discoverUrl( $icon_path, $this->getConfig() ),
+				'url_access_name'			=> $this->getConfig()->url_folder_name
 			) );
 
 			// --Write an XML?--
@@ -96,7 +103,7 @@ class Gallery extends BaseClass
 
 			// Pack Image Data.
 			$image_properties = array_merge( $image_properties, array(
-				'path'					=> $file_item_path,							// CHECK!
+				'path'					=> $file_item_path,
 				'is_landscape'	=> ImageHelper::isLandscape( $image_properties['width'], $image_properties['height'] ),
 				'title'					=> ImageHelper::getCleanName( $file_name ),
 				'filename'			=> $file_name
@@ -119,11 +126,14 @@ class Gallery extends BaseClass
 			ImageHelper::resizeToProfile( $pic, $this->getConfig(), 'cached' );
 
 			// Add extra data
-			$url_data = FileSystem::discoverUrl( $pic, $this->getConfig() );
+			$url_data = Url::discoverPicUrls( $pic, $this->getConfig() );
 			$pic->loadData( array(
-				'url'					=>	$url_data['url'],
-				'thumb_url'		=>	$url_data['thumb_url'],
-				'chached_url'	=>	$url_data['chached_url']
+				'url'									=> $url_data['url'],
+				'thumb_url'						=> $url_data['thumb_url'],
+				'chached_url'					=> $url_data['chached_url'],
+				'relative_url'				=> Url::getRelative( $image_properties['path'] ),
+				'relative_path_only'	=> Url::getRelativeWithoutFile( $image_properties['path'], $file_name ),
+				'url_access_name'			=> $this->getConfig()->url_item_name
 			) );
 
 			// --Write an XML?--
@@ -133,11 +143,38 @@ class Gallery extends BaseClass
 		return $pic_list;
 	}
 
-	private function _getFiles( $is_root = false )
+	private function _getFiles( $folder_to_parse )
 	{
+		if ( DIR_SEPARATOR === $folder_to_parse[ strlen( $folder_to_parse ) - 1 ] )
+		{
+			$folder_to_parse = substr( $folder_to_parse, 0, -1 );
+		}
+
 		// Modifying depending on being root.
-		$config->include_back_folder = !$is_root;
-		return FileSystem::getAlbumTree( $this->getConfig()->gallery_path, $this->getConfig() );
+		$config = $this->getConfig();
+		$config->include_back_folder = true;
+		$folder = $folder_to_parse;
+
+		if ( $this->_isRootFolder( $folder_to_parse ) )
+		{
+			$config->include_back_folder = false;
+			$folder = $config->gallery_path;
+		}
+
+		return FileSystem::getAlbumTree( $folder, $config );
+	}
+
+	private function _isRootFolder( $folder_to_parse )
+	{
+		if ( '' === $folder_to_parse )
+		{
+			return true;
+		}
+		if ( $this->getConfig()->gallery_path === $folder_to_parse )
+		{
+			return true;
+		}
+		return false;
 	}
 }
 ?>

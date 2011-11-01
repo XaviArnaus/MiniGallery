@@ -24,6 +24,8 @@ function __autoload( $class_name )
 
 class Dispatcher extends BaseClass
 {
+	protected $_params = array();
+
 	public function __construct()
 	{}
 
@@ -49,20 +51,24 @@ class Dispatcher extends BaseClass
 
 	public function runGallery()
 	{
-		$gallery	= new Gallery( $this->getConfig() );
+		// Before anything, we have to obtaing the absolute path of the received relative.
+		$this->_params['folder'] = Url::refillRelativePath( $this->_params['folder'], $this->getConfig() );
+		$gallery	= new Gallery( $this->getConfig(), $this->_params['folder'] );
 		$output		= $gallery->getContent();
 		unset( $gallery );
 
 		return $output;
 	}
 
-	public function run( $type = 'gallery' )
+	public function run()
 	{
 		try
 		{
-			switch( $type )
+			// Parse URL
+			$this->_params = Url::parseUrl( $_GET );
+			switch( $this->_params['type'] )
 			{
-				case 'gallery':
+				case 'folder':
 					header( 'Content-Type: text/html; charset=UTF-8' );
 					print $this->runGallery();
 					break;
@@ -73,7 +79,6 @@ class Dispatcher extends BaseClass
 			AlertHelper::showError( "Run Error.", $e );
 		}
 	}
-
 	
 }
 ?>
