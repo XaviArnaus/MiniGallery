@@ -231,6 +231,27 @@ body {
 	max-width:800px;
 }
 
+.back-to-gallery
+{
+	float: left;
+	clear: both;
+}
+.back-to-gallery a
+{
+	text-decoration: none;
+	cursor: hand;
+}
+.back-to-gallery a img.back-icon
+{
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
+.back-to-gallery a p
+{
+	display: inline;
+}
+
 
 
 

@@ -14,12 +14,36 @@ class Element extends BaseClass
 	public function __construct( $item_to_parse = '' )
 	{
 		// Generate the object.
-		$element = $this->getFile( $item_to_parse );
+		$element		= $this->getFile( $item_to_parse );
+		// Generate the extra data for this element.
+		$extra_data	= $this->getExtraData( $element );
 
 		// Render the template
-		$this->html_content = ElementView::build( $element );
+		$this->html_content = ElementView::build( $element, $extra_data );
 
 		unset($element);
+	}
+
+	protected function getExtraData( $element )
+	{
+		// We need to be able to return to the gallery.
+		$folder = new Folder();
+		$folder->loadData( array(	// Only basic data to be able to create links.
+			'path'							=> Url::refillRelativePath( $element->getRelativePathOnly() ),
+			'url_access_name'		=> Instance::getConfig()->url_folder_name,
+			'relative_url'			=> Url::getRelative( $element->getRelativePathOnly() ),
+		) );
+
+		$extra_data = array(
+			'back_url'			=> Url::itemLink( $folder ),
+			'back_icon_src'	=> Url::discoverUrl( $icon_path	= Instance::getConfig()->gallery_path . DIR_SEPARATOR .
+														Instance::getConfig()->gallery_folder . DIR_SEPARATOR .
+														Instance::getConfig()->template_folder . DIR_SEPARATOR .
+														Instance::getConfig()->template_images_folder . DIR_SEPARATOR . 'back.png' ),
+			'back_text'			=> $element->getRelativePathOnly()
+		);
+
+		return $extra_data;
 	}
 
 	// This can become the source on the gallery part!
@@ -64,8 +88,6 @@ class Element extends BaseClass
 			'relative_path_only'	=> Url::getRelativeWithoutFile( $image_properties['path'], $file_name ),
 			'url_access_name'			=> Instance::getConfig()->url_item_name
 		) );
-
-		// --Write an XML?--
 
 		return $pic;
 	}

@@ -6,7 +6,8 @@ class Url extends BaseClass
 {
 	public static function itemLink( $item )
 	{
-		$url = Instance::getConfig()->gallery_url . $item->getUrlAccessName() . $item->getRealUrl( true );
+		$_url	= $item->getRealUrl( true );
+		$url	= Instance::getConfig()->gallery_url . ( '' === $_url ? '' : $item->getUrlAccessName() . $_url );
 		return $url;
 	}
 
