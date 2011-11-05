@@ -4,8 +4,6 @@
  */
 class BaseClass
 {
-	protected $_config = null;
-	protected $_collection = null;
 	protected $_error_message	= null;
 	protected $_exception			= null;
 
