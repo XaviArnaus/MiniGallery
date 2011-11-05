@@ -11,7 +11,7 @@ class Gallery extends BaseClass
 		return $this->html_content;
 	}
 
-	public function __construct( $folder_to_parse = '' )
+	public function build( $folder_to_parse = '' )
 	{
 		// Get the full tree (photos and dirs)
 		$file_data = $this->_getFiles( $folder_to_parse );

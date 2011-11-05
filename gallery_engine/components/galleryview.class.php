@@ -55,6 +55,7 @@ class GalleryView extends BaseClass
 		$pic_template->assign( 'item_url', Url::itemLink( $item ) );
 		$pic_template->assign( 'thumb_name', $item->getSlug() );
 		$pic_template->assign( 'thumb_src', $item->getThumbUrl() );
+		$pic_template->assign( 'item-type', 'element' );
 
 		// Fetch and destroy the template object.
 		$output = $pic_template->fetch();
@@ -78,6 +79,7 @@ class GalleryView extends BaseClass
 		$pic_template->assign( 'item_url', Url::itemLink( $item ) );
 		$pic_template->assign( 'thumb_name', $slug );
 		$pic_template->assign( 'thumb_src', $item->getIconUrl() );
+		$pic_template->assign( 'item-type', 'folder' );
 
 		// Fetch and destroy the template object.
 		$output = $pic_template->fetch();

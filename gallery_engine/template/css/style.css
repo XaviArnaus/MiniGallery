@@ -209,8 +209,15 @@ body {
 
 .gallery-item img
 {
-	border: 1px solid white;
 	padding: 1px;
+}
+.gallery-item img.element
+{
+	border: 1px solid white;
+}
+.gallery-item img.folder
+{
+	margin-top: 10px;
 }
 
 .element-container
@@ -261,6 +268,21 @@ body {
 .siblings-after .element-item
 {
 	float:right;
+}
+.element-info
+{
+	margin-top: 10px;
+	background-color: black;
+}
+.element-info table
+{
+	margin: 0 auto;
+	text-align: left;
+}
+.element-info table td
+{
+	padding: 5px;
+	color: white;
 }
 
 

@@ -30,6 +30,19 @@ class Bootstrap
 		$params = Url::parseUrl( $_GET );
 		Instance::setParams( $params );
 
+		// If there is no Htaccess, create it
+		if ( !Htaccess::exists() )
+		{
+			$body = Htaccess::generate();
+
+			AlertHelper::showError( "Could not find file <i>.htaccess</i> in your '" . Htaccess::getSubDir() . "' folder.<br />
+																This is needed for routing, and has to start with a dot and without extension.<br />
+																Please create it using the following content:<br /><br />
+																<pre style='padding:10px;background-color:lightgrey;border:1px solid black'>" .
+																$body . "</pre>" );
+			die();
+		}
+
 		// Execute the dispatcher.
 		try
 		{

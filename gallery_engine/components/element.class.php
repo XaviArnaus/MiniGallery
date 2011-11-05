@@ -11,7 +11,7 @@ class Element extends BaseClass
 		return $this->html_content;
 	}
 
-	public function __construct( $item_to_parse = '' )
+	public function build( $item_to_parse = '' )
 	{
 		// Generate the object.
 		$element		= $this->getFile( $item_to_parse );
@@ -38,13 +38,16 @@ class Element extends BaseClass
 		) );
 
 		$extra_data = array(
-			'back_url'			=> Url::itemLink( $folder ),
-			'back_icon_src'	=> Url::discoverUrl( Instance::getConfig()->gallery_path . DIR_SEPARATOR .
+			'back_url'					=> Url::itemLink( $folder ),
+			'back_icon_src'			=> Url::discoverUrl( Instance::getConfig()->gallery_path . DIR_SEPARATOR .
 														Instance::getConfig()->gallery_folder . DIR_SEPARATOR .
 														Instance::getConfig()->template_folder . DIR_SEPARATOR .
 														Instance::getConfig()->template_images_folder . DIR_SEPARATOR . 'back.png' ),
-			'back_text'			=> $element->getRelativePathOnly(),
-			'siblings'			=> $this->getSiblings( $element )
+			'back_text'					=> $element->getRelativePathOnly(),
+			'siblings'					=> $this->getSiblings( $element ),
+			'element_full_url'	=> $element->getRealUrl(),
+			'element_width'			=> $element->getWidth(),
+			'element_height'		=> $element->getHeight()
 		);
 
 		return $extra_data;
@@ -117,7 +120,7 @@ class Element extends BaseClass
 	}
 
 	// This can become the source on the gallery part!
-	protected function getFile( $file_item_path )
+	public function getFile( $file_item_path )
 	{
 		// Discover Image Properties --Is it in the XML?--
 		$file_name				= ImageHelper::getFileName( $file_item_path );

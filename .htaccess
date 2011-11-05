@@ -5,6 +5,7 @@ RewriteBase /
 
 RewriteCond %{REQUEST_URI} !^/Fotos/gallery_engine(.*)$
 RewriteCond %{REQUEST_URI} !^/Fotos/index(.*)$
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ /Fotos/index.php?request=$1 [L]
 
 

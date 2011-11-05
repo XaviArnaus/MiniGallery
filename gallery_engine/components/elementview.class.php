@@ -65,6 +65,9 @@ class ElementView extends BaseClass
 		// Assignments.
 		$template->assign( 'siblings_before', $content['before'] );
 		$template->assign( 'siblings_after', $content['after'] );
+		$template->assign( 'element_full_url', $extra_data['element_full_url'] );
+		$template->assign( 'element_width', $extra_data['element_width'] );
+		$template->assign( 'element_height', $extra_data['element_height'] );
 
 		// Fetch and destroy the template object.
 		$output = $template->fetch();

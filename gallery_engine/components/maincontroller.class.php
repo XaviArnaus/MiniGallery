@@ -50,7 +50,8 @@ class MainController extends BaseClass
 	{
 		// Before anything, we have to obtain the absolute path of the received relative.
 		$this->_params['folder'] = Url::refillRelativePath( $this->_params['folder'] );
-		$gallery	= new Gallery( $this->_params['folder'] );
+		$gallery	= new Gallery();
+		$gallery->build( $this->_params['folder'] );
 		$output		= $gallery->getContent();
 		unset( $gallery );
 
@@ -61,7 +62,8 @@ class MainController extends BaseClass
 	{
 		// Before anything, we have to obtain the absolute path of the received relative.
 		$this->_params['item'] = Url::refillRelativePath( $this->_params['item'] );
-		$element	= new Element( $this->_params['item'] );
+		$element	= new Element();
+		$element->build( $this->_params['item'] );
 		$output		= $element->getContent();
 		unset( $item );
 
