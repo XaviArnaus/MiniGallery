@@ -14,10 +14,9 @@ class Element extends BaseClass
 	public function build( $item_to_parse = '' )
 	{
 		// Generate the object.
-		$element		= $this->getFile( $item_to_parse );
+		$element		= self::getFile( $item_to_parse );
 		// Generate the extra data for this element.
 		$extra_data	= $this->getExtraData( $element );
-
 		// Render the template
 		$this->html_content = ElementView::build( $element, $extra_data );
 
@@ -120,7 +119,7 @@ class Element extends BaseClass
 	}
 
 	// This can become the source on the gallery part!
-	public function getFile( $file_item_path )
+	public static function getFile( $file_item_path )
 	{
 		// Discover Image Properties --Is it in the XML?--
 		$file_name				= ImageHelper::getFileName( $file_item_path );

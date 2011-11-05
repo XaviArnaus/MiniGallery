@@ -26,8 +26,7 @@ class MainController extends BaseClass
 		$main_template->setCss( 'style.css' );
 		$main_template->assign( 'site_title', Instance::getConfig()->gallery_name );
 		$main_template->assign( 'site_url', Instance::getConfig()->gallery_url );
-		$main_template->assign( 'site_slogan', Instance::getConfig()->gallery_desc );
-		$main_template->assign( 'content_head', 'Nom del directori actual' );
+		$main_template->assign( 'site_slogan', Instance::getConfig()->gallery_description );
 		$main_template->assign( 'footer', self::getFooterOutput() );
 
 		return $main_template;

@@ -112,27 +112,5 @@ class FileSystem
 		}
 		return $path;
 	}
-
-	// Unused
-	public static function getRealURLfromPathRaw()
-	{
-		$pieces = explode('/',$_SERVER['SCRIPT_FILENAME']);
-		$pieces = array_slice($pieces,0,count($pieces)-1);
-		$script_path = implode('/',$pieces);
-		
-		$pos = strpos($this->path,$script_path) + strlen($script_path);
-		
-		$request_uri = $_SERVER['REQUEST_URI'];
-		
-		$url_pieces = array();
-		foreach(explode('/',$request_uri) as $pieces)
-		{
-			if(strpos($pieces,'?')) break;
-			else $url_pieces[]=$pieces;
-		}
-		$url = 'http://'.$_SERVER['SERVER_NAME'].implode('/',$url_pieces).substr($this->path,$pos);
-		
-		$this->url = $url;
-	}
 }
 ?>

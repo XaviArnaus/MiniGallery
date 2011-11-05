@@ -30,12 +30,17 @@ class Config
 
 	public function __construct( $config_file )
 	{
-		$this->gallery_url = Url::discoverCleanURL();
-
 		if ( !is_null( $config_file ) )
 		{
 			$this->load( $config_file );
 		}
+		// Corrections.
+		if ( is_null( $this->gallery_url ) )
+		{
+			$this->gallery_url = Url::discoverCleanURL();
+		}
+		$this->include_back_folder	= (bool)$this->include_back_folder;
+		$this->force_bigger					= (bool)$this->force_bigger;
 	}
 
 	public function getThumbnailsFolder()
@@ -53,9 +58,10 @@ class Config
 		return $this->gallery_path . DIR_SEPARATOR . $this->gallery_folder . DIR_SEPARATOR . $this->gallery_xml_folder;
 	}
 
-	protected function load( $config_path )
+	protected function load( $config_file )
 	{
-		$file_contents = include( $config_path );
+		$file_contents = include( $config_file );
+
 		foreach( $file_contents as $attr => $value )
 		{
 			$this->$attr = $value;

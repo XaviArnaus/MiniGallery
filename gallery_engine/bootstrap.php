@@ -17,7 +17,7 @@ class Bootstrap
 	 *
 	 * @param string $config_file Config file to be loaded. Optional.
 	 */
-	public function init( $config_file = "default.config" )
+	public function init( $config_file = "default" )
 	{
 		// Make some adjustments depending on what environment are we.
 		$this->setByEnvironment();
@@ -30,17 +30,12 @@ class Bootstrap
 		$params = Url::parseUrl( $_GET );
 		Instance::setParams( $params );
 
-		// If there is no Htaccess, create it
-		if ( !Htaccess::exists() )
+		// Check the precence of needed data.
+		$checks	= Install::checkStructure( $config_file );
+		if ( Install::shouldShowInstall( $checks ) )
 		{
-			$body = Htaccess::generate();
-
-			AlertHelper::showError( "Could not find file <i>.htaccess</i> in your '" . Htaccess::getSubDir() . "' folder.<br />
-																This is needed for routing, and has to start with a dot and without extension.<br />
-																Please create it using the following content:<br /><br />
-																<pre style='padding:10px;background-color:lightgrey;border:1px solid black'>" .
-																$body . "</pre>" );
-			die();
+			Install::show( $checks, $config_file );
+			return;
 		}
 
 		// Execute the dispatcher.
@@ -80,14 +75,19 @@ class Bootstrap
 	 */
 	protected function loadConfig( $config_file = null )
 	{
-		if ( !is_null( $config_file ) && is_readable( $config_file ) )
-		{
-			$config_file = CONFIG_DIR . $config_file . '.config.php';
-		}
-		else
+		if ( is_null( $config_file ) )
 		{
 			$config_file = null;
 		}
+		else
+		{
+			$config_file = CONFIG_DIR . DIR_SEPARATOR . $config_file . '.config.php';
+			if ( !is_readable( $config_file ) )
+			{
+				$config_file = null;
+			}
+		}
+
 		try
 		{
 			return new Config( $config_file );
