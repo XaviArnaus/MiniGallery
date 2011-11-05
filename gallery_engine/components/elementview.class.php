@@ -11,6 +11,7 @@ class ElementView extends BaseClass
 
 		// Assignments.
 		$template->assign( 'content', self::getPicOutput( $pic_data, $extra_data ) );
+		$template->assign( 'extra_content', self::getExtraOutput( $extra_data ) );
 
 		// Fetch and destroy the template object.
 		$output = $template->fetch();
@@ -18,19 +19,26 @@ class ElementView extends BaseClass
 		return $output;
 	}
 
-	protected static function getPicOutput( $item, $extra_data )
+	protected static function getPicOutput( $item, $extra_data = null, $use_thumb = false )
 	{
 		// Create a template object
-		$pic_template = new Template( 'element_item' );
+		$pic_template = new Template( ( $use_thumb ? 'element_extradata_item' : 'element_item' ) );
 
 		// Assignments.
 		$pic_template->assign( 'item_url', Url::itemLink( $item ) );
-		$pic_template->assign( 'element_name', $item->getSlug() );
-		$pic_template->assign( 'element_src', $item->getCachedUrl() );
-		$pic_template->assign( 'back_url', $extra_data['back_url'] );
-		$pic_template->assign( 'back_icon_src', $extra_data['back_icon_src'] );
-		$pic_template->assign( 'back_text', $extra_data['back_text'] );
-
+		$pic_template->assign( 'element_name', ( $use_thumb ? '' : $item->getSlug() ) );
+		$pic_template->assign( 'element_src', ( $use_thumb ? $item->getThumbUrl() : $item->getCachedUrl() ) );
+		if ( is_null( $extra_data ) )
+		{
+			$pic_template->assign( 'back_class', 'style="display:none;"' );
+		}
+		else
+		{
+			$pic_template->assign( 'back_class', '' );
+			$pic_template->assign( 'back_url', $extra_data['back_url'] );
+			$pic_template->assign( 'back_icon_src', $extra_data['back_icon_src'] );
+			$pic_template->assign( 'back_text', $extra_data['back_text'] );
+		}
 		// Fetch and destroy the template object.
 		$output = $pic_template->fetch();
 		unset( $pic_template );
@@ -39,21 +47,28 @@ class ElementView extends BaseClass
 		return $output;
 	}
 
-	protected static function getExtraOutput( $item )
+	protected static function getExtraOutput( $extra_data )
 	{
 		// Create a template object
-		$pic_template = new Template( 'element_extra' );
+		$template = new Template( 'element_extradata' );
+
+		// Parse all siblings through the template
+		foreach( $extra_data['siblings'] as $sibling_pos => $data )
+		{
+			$content[$sibling_pos] = '';
+			foreach( $data as $sibling )
+			{
+				$content[$sibling_pos].= self::getPicOutput( $sibling, null, true );
+			}
+		}
 
 		// Assignments.
-		$pic_template->assign( 'item_url', Url::itemLink( $item ) );
-		$pic_template->assign( 'element_name', $item->getSlug() );
-		$pic_template->assign( 'element_src', $item->getCachedUrl() );
+		$template->assign( 'siblings_before', $content['before'] );
+		$template->assign( 'siblings_after', $content['after'] );
 
 		// Fetch and destroy the template object.
-		$output = $pic_template->fetch();
-		unset( $pic_template );
+		$output = $template->fetch();
 
-		// Return
 		return $output;
 	}
 }

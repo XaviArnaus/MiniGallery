@@ -1,4 +1,4 @@
-<div class="back-to-gallery">
+<div class="back-to-gallery" {{ back_class }}>
 	<a href="{{ back_url }}">
 		<img src="{{ back_icon_src }}" class="back-icon" />
 		<p>Volver a la {{ back_text }}</p>

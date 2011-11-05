@@ -3,6 +3,6 @@
 		{{ content }}
 	</div>
 	<div class="extra-container">
-		{{ extra-content }}
+		{{ extra_content }}
 	</div>
 </div>

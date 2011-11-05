@@ -112,7 +112,12 @@ class Url extends BaseClass
 
 	public static function refillRelativePath( $relative_path )
 	{
-		return Instance::getConfig()->gallery_path . '/' . $relative_path;
+		$separator = '/';
+		if ( '/' === $relative_path[0] )
+		{
+			$separator = '';
+		}
+		return Instance::getConfig()->gallery_path . $separator . $relative_path;
 	}
 }
 ?>

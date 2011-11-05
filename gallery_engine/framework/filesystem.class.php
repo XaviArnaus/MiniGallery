@@ -104,6 +104,15 @@ class FileSystem
 		}
 	}
 
+	public static function stripTailingSlash( $path )
+	{
+		if ( '/' === $path[ strlen( $path ) - 1 ] )
+		{
+			return substr( $path, 0, -1 );
+		}
+		return $path;
+	}
+
 	// Unused
 	public static function getRealURLfromPathRaw()
 	{

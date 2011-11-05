@@ -24,6 +24,9 @@ class Element extends BaseClass
 		unset($element);
 	}
 
+	/**
+	 * Data related to the element but not meaning the pic itself.
+	 */
 	protected function getExtraData( $element )
 	{
 		// We need to be able to return to the gallery.
@@ -31,19 +34,86 @@ class Element extends BaseClass
 		$folder->loadData( array(	// Only basic data to be able to create links.
 			'path'							=> Url::refillRelativePath( $element->getRelativePathOnly() ),
 			'url_access_name'		=> Instance::getConfig()->url_folder_name,
-			'relative_url'			=> Url::getRelative( $element->getRelativePathOnly() ),
+			'relative_url'			=> $element->getRelativePathOnly(),
 		) );
 
 		$extra_data = array(
 			'back_url'			=> Url::itemLink( $folder ),
-			'back_icon_src'	=> Url::discoverUrl( $icon_path	= Instance::getConfig()->gallery_path . DIR_SEPARATOR .
+			'back_icon_src'	=> Url::discoverUrl( Instance::getConfig()->gallery_path . DIR_SEPARATOR .
 														Instance::getConfig()->gallery_folder . DIR_SEPARATOR .
 														Instance::getConfig()->template_folder . DIR_SEPARATOR .
 														Instance::getConfig()->template_images_folder . DIR_SEPARATOR . 'back.png' ),
-			'back_text'			=> $element->getRelativePathOnly()
+			'back_text'			=> $element->getRelativePathOnly(),
+			'siblings'			=> $this->getSiblings( $element )
 		);
 
 		return $extra_data;
+	}
+
+	protected function getSiblings( $element, $number_of_siblings_per_side = 2 )
+	{
+		$folder_path = Url::refillRelativePath( $element->getRelativePathOnly() );
+		$folder_path = FileSystem::stripTailingSlash( $folder_path );
+		$tree	= FileSystem::getAlbumTree( $folder_path, false );
+		$pics	= $tree['files'];
+		unset( $tree );
+
+		// Find the element inside the list of elements.
+		$element_pos = array_search( $element->getPath(), $pics );
+
+		$result =	array(
+			'before'	=> array(),
+			'after'		=> array()
+		);
+		// Did we found it?
+		if ( false === $element_pos )
+		{
+			return $result;
+		}
+		// Found, so lets take some before and after.
+		$before	= $this->_getBeforeSiblings( $pics, $element_pos, $number_of_siblings_per_side );
+		$after	= $this->_getAfterSiblings( $pics, $element_pos, $number_of_siblings_per_side );
+		// When using float:right in style, it auto-reverses the order!!
+		$after = array_reverse( $after );
+		// Load Pic objects.
+		foreach( $before as $item )
+		{
+			$result['before'][]=$this->getFile( $item ); 
+		}
+		foreach( $after as $item )
+		{
+			$result['after'][]=$this->getFile( $item ); 
+		}
+		return $result;
+	}
+
+	private function _getBeforeSiblings( $array, $element_position, $number_of_siblings_per_side )
+	{
+		if ( $number_of_siblings_per_side > $element_position )
+		{
+			$start	= 0;
+			$length	= $element_position;
+		}
+		else
+		{
+			$start	= $element_position - $number_of_siblings_per_side;
+			$length = $number_of_siblings_per_side;
+		}
+		return array_slice( $array, $start, $length );
+	}
+	private function _getAfterSiblings( $array, $element_position, $number_of_siblings_per_side )
+	{
+		if ( $number_of_siblings_per_side > ( count( $array ) -1 ) - $element_position )
+		{
+			$start	= $element_position + 1;
+			$length	= ( count( $array ) -1 ) - $element_position;
+		}
+		else
+		{
+			$start	= $element_position + 1;
+			$length = $number_of_siblings_per_side;
+		}
+		return array_slice( $array, $start, $length );
 	}
 
 	// This can become the source on the gallery part!

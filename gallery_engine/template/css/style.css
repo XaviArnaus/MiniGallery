@@ -218,9 +218,12 @@ body {
 	width: 100%;
 }
 
+.element-container .element-item
+{
+	clear: both;
+}
 .element-item
 {
-	clear:both;
 	margin: 5px;
 }
 
@@ -251,7 +254,14 @@ body {
 {
 	display: inline;
 }
-
+.siblings-before .element-item
+{
+	float:left;
+}
+.siblings-after .element-item
+{
+	float:right;
+}
 
 
 
