@@ -4,9 +4,9 @@
  */
 class Url extends BaseClass
 {
-	public static function itemLink( $item, $config )
+	public static function itemLink( $item )
 	{
-		$url = $config->gallery_url . $item->getUrlAccessName() . $item->getRealUrl( true );
+		$url = Instance::getConfig()->gallery_url . $item->getUrlAccessName() . $item->getRealUrl( true );
 		return $url;
 	}
 
@@ -46,10 +46,10 @@ class Url extends BaseClass
 		return substr( $path, 0, - ( strlen( $filename ) ) );
 	}
 
-	public static function discoverUrl( $path, $config )
+	public static function discoverUrl( $path )
 	{
 		// Expecting that the Pic path is absolute, so we compare with the gallery user defined path.
-		$pos = strpos( $path, $config->gallery_path );
+		$pos = strpos( $path, Instance::getConfig()->gallery_path );
 		if ( false === $pos )
 		{
 			throw new Error( 'The path defined for the gallery and the file path does not match' );
@@ -58,21 +58,21 @@ class Url extends BaseClass
 		{
 			throw new Error( 'We were expecting absolute paths!' );
 		}
-		$length	= strlen( $config->gallery_path );
+		$length	= strlen( Instance::getConfig()->gallery_path );
 
-		return $config->gallery_url . substr( $path, $length + 1 );
+		return Instance::getConfig()->gallery_url . substr( $path, $length + 1 );
 	}
 
-	public static function discoverPicUrls( $item, $config )
+	public static function discoverPicUrls( $item )
 	{
 		$result = array(
-			'url'	=> self::discoverUrl( $item->getPath(), $config )
+			'url'	=> self::discoverUrl( $item->getPath() )
 		);
 
-		$length	= strlen( $config->gallery_path );
+		$length	= strlen( Instance::getConfig()->gallery_path );
 
-		$result['thumb_url']	= $config->gallery_url . substr( $item->getProfilePath( 'thumb' ), $length + 1 );
-		$result['cached_url']	= $config->gallery_url . substr( $item->getProfilePath( 'cached' ), $length + 1 );
+		$result['thumb_url']	= Instance::getConfig()->gallery_url . substr( $item->getProfilePath( 'thumb' ), $length + 1 );
+		$result['cached_url']	= Instance::getConfig()->gallery_url . substr( $item->getProfilePath( 'cached' ), $length + 1 );
 
 		return $result;
 	}
@@ -109,9 +109,9 @@ class Url extends BaseClass
 		return $params;
 	}
 
-	public static function refillRelativePath( $relative_path, $config )
+	public static function refillRelativePath( $relative_path )
 	{
-		return $config->gallery_path . '/' . $relative_path;
+		return Instance::getConfig()->gallery_path . '/' . $relative_path;
 	}
 }
 ?>

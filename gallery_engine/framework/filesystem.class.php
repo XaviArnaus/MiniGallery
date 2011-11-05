@@ -11,12 +11,11 @@ class FileSystem
 	}
 
 	// Caution: this is recursive.
-	public static function getAlbumTree( $base_path, $config, $only_current_level = true )
+	public static function getAlbumTree( $base_path, $include_back_folder, $only_current_level = true )
 	{
 		// Adquiring the params.
-		$include_back_folder	= $config->include_back_folder;
-		$valid_extensions			= $config->valid_extensions;
-		$banned_dirs					= $config->banned_folders;
+		$valid_extensions			= Instance::getConfig()->valid_extensions;
+		$banned_dirs					= Instance::getConfig()->banned_folders;
 
 		// Start to handle.
 		$dir_handle = opendir($base_path);
@@ -39,7 +38,7 @@ class FileSystem
 					$tree['files'][]= $base_path. DIR_SEPARATOR . $f;
 				}
 				// Is this a directory?
-				if( is_dir( $base_path. DIR_SEPARATOR . $f ) && !self::isBannedDir( $f, $config ) )
+				if( is_dir( $base_path. DIR_SEPARATOR . $f ) && !self::isBannedDir( $f ) )
 				{
 					// Add it to the array
 					$tree['dirs'][]= $base_path. DIR_SEPARATOR . $f;
@@ -47,7 +46,7 @@ class FileSystem
 					if ( !$only_current_level )
 					{
 						// Let's parse this directory as well
-						$subtree = self::getAlbumTree( $base_path. DIR_SEPARATOR . $f, $config, $only_current_level );
+						$subtree = self::getAlbumTree( $base_path. DIR_SEPARATOR . $f, $include_back_folder, $only_current_level );
 
 						// If we got any results, parse them.
 						if ( !is_null( $subtree ) )
@@ -73,9 +72,9 @@ class FileSystem
 		return $tree;
 	}
 
-	public static function isBannedDir( $current_dir, $config )
+	public static function isBannedDir( $current_dir )
 	{
-		$banned_dirs = $config->banned_folders;
+		$banned_dirs = Instance::getConfig()->banned_folders;
 		// First let us know if this folder starts with a dot (so should be hidden)
 		if ( '.' === $current_dir[0] && '..' !== $current_dir )
 		{

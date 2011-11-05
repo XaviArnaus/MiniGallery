@@ -11,11 +11,8 @@ class Gallery extends BaseClass
 		return $this->html_content;
 	}
 
-	public function __construct( Config $config, $folder_to_parse = '' )
+	public function __construct( $folder_to_parse = '' )
 	{
-		// Inyect the config.
-		$this->_config = $config;
-
 		// Get the full tree (photos and dirs)
 		$file_data = $this->_getFiles( $folder_to_parse );
 
@@ -25,7 +22,7 @@ class Gallery extends BaseClass
 		unset( $file_data );
 
 		// Generate the HTML output
-		$this->html_content = GalleryView::build( $folder_array, $pic_array, $this->getConfig() );
+		$this->html_content = GalleryView::build( $folder_array, $pic_array );
 
 		// Last destroying.
 		unset( $pic_array );
@@ -61,19 +58,19 @@ class Gallery extends BaseClass
 			$folder->loadData( $image_properties );
 
 			// Add extra data
-			$icon_path	= $this->getConfig()->gallery_path . DIR_SEPARATOR .
-										$this->getConfig()->gallery_folder . DIR_SEPARATOR .
-										$this->getConfig()->template_folder . DIR_SEPARATOR .
-										$this->getConfig()->template_images_folder . DIR_SEPARATOR . 'folder.png';
-			$url_data		= Url::discoverPicUrls( $folder, $this->getConfig() );
+			$icon_path	= Instance::getConfig()->gallery_path . DIR_SEPARATOR .
+										Instance::getConfig()->gallery_folder . DIR_SEPARATOR .
+										Instance::getConfig()->template_folder . DIR_SEPARATOR .
+										Instance::getConfig()->template_images_folder . DIR_SEPARATOR . 'folder.png';
+			$url_data		= Url::discoverPicUrls( $folder );
 			$folder->loadData( array(
 				'url'									=> $url_data['url'],
 				'thumb_url'						=> $url_data['url'],
 				'chached_url'					=> $url_data['url'],
 				'relative_url'				=> Url::getRelative( $image_properties['path'] ),
 				'relative_path_only'	=> Url::getRelative( $image_properties['path'] ),
-				'icon_url'						=> Url::discoverUrl( $icon_path, $this->getConfig() ),
-				'url_access_name'			=> $this->getConfig()->url_folder_name
+				'icon_url'						=> Url::discoverUrl( $icon_path ),
+				'url_access_name'			=> Instance::getConfig()->url_folder_name
 			) );
 
 			// --Write an XML?--
@@ -114,26 +111,26 @@ class Gallery extends BaseClass
 			$pic->loadData( $image_properties );
 
 			// Calculate Thumb / Cached sizes
-			$thumb_cached_sizes = ImageHelper::getProportionalSizes( $pic, $this->getConfig() );
+			$thumb_cached_sizes = ImageHelper::getProportionalSizes( $pic );
 			$pic->loadData( $thumb_cached_sizes );
 
 			// Generate & Check / Point Thumb & Cache
 			$pic->loadData( array(
-				'thumb_path'	=> ImageHelper::generateProfilePaths( $pic, $this->getConfig(), 'thumb' ),
-				'cached_path'	=> ImageHelper::generateProfilePaths( $pic, $this->getConfig(), 'cached' )
+				'thumb_path'	=> ImageHelper::generateProfilePaths( $pic, 'thumb' ),
+				'cached_path'	=> ImageHelper::generateProfilePaths( $pic, 'cached' )
 			) );
-			ImageHelper::resizeToProfile( $pic, $this->getConfig(), 'thumb' );
-			ImageHelper::resizeToProfile( $pic, $this->getConfig(), 'cached' );
+			ImageHelper::resizeToProfile( $pic, 'thumb' );
+			ImageHelper::resizeToProfile( $pic, 'cached' );
 
 			// Add extra data
-			$url_data = Url::discoverPicUrls( $pic, $this->getConfig() );
+			$url_data = Url::discoverPicUrls( $pic );
 			$pic->loadData( array(
 				'url'									=> $url_data['url'],
 				'thumb_url'						=> $url_data['thumb_url'],
 				'cached_url'					=> $url_data['cached_url'],
 				'relative_url'				=> Url::getRelative( $image_properties['path'] ),
 				'relative_path_only'	=> Url::getRelativeWithoutFile( $image_properties['path'], $file_name ),
-				'url_access_name'			=> $this->getConfig()->url_item_name
+				'url_access_name'			=> Instance::getConfig()->url_item_name
 			) );
 
 			// --Write an XML?--
@@ -151,17 +148,16 @@ class Gallery extends BaseClass
 		}
 
 		// Modifying depending on being root.
-		$config = $this->getConfig();
-		$config->include_back_folder = true;
+		$include_back_folder = Instance::getConfig()->include_back_folder;
 		$folder = $folder_to_parse;
 
 		if ( $this->_isRootFolder( $folder_to_parse ) )
 		{
-			$config->include_back_folder = false;
-			$folder = $config->gallery_path;
+			$include_back_folder = false;
+			$folder = Instance::getConfig()->gallery_path;
 		}
 
-		return FileSystem::getAlbumTree( $folder, $config );
+		return FileSystem::getAlbumTree( $folder, $include_back_folder );
 	}
 
 	private function _isRootFolder( $folder_to_parse )
@@ -170,7 +166,7 @@ class Gallery extends BaseClass
 		{
 			return true;
 		}
-		if ( $this->getConfig()->gallery_path === $folder_to_parse )
+		if ( Instance::getConfig()->gallery_path === $folder_to_parse )
 		{
 			return true;
 		}

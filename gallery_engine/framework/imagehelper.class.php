@@ -68,37 +68,37 @@ class ImageHelper extends ImageResizer
 		return $name;
 	}
 
-	public static function getProportionalSizes( $image_object, $config )
+	public static function getProportionalSizes( $image_object )
 	{
 		$data = array();
 		if($image_object->landscape)
 		{
-			$data['thumb_width'] = $config->thumb_forced_width;
+			$data['thumb_width'] = Instance::getConfig()->thumb_forced_width;
 			$data['thumb_height'] = intval( ( $data['thumb_width'] / $image_object->getWidth() ) * $image_object->getHeight() );
 			
-			$data['cached_width'] = $config->cached_forced_width;
+			$data['cached_width'] = Instance::getConfig()->cached_forced_width;
 			$data['cached_height'] = intval( ( $data['cached_width'] / $image_object->getWidth() ) * $image_object->getHeight() );
 		}
 		else 
 		{
-			$data['thumb_height'] = $config->thumb_forced_width;
+			$data['thumb_height'] = Instance::getConfig()->thumb_forced_width;
 			$data['thumb_width'] = intval( ( $data['thumb_height'] / $image_object->getHeight() ) * $image_object->getWidth() );
 			
-			$data['cached_height'] = $config->cached_forced_width;
+			$data['cached_height'] = Instance::getConfig()->cached_forced_width;
 			$data['cached_width'] = intval( ( $data['cached_height'] / $image_object->getHeight() ) * $image_object->getWidth() );
 		}
 		return $data;
 	}
 
-	public static function generateProfilePaths( $pic, $config, $profile = 'thumb' )
+	public static function generateProfilePaths( $pic, $profile = 'thumb' )
 	{
 		switch( $profile )
 		{
 			case 'thumb':
-				$dir_target	= $config->getThumbnailsFolder();
+				$dir_target	= Instance::getConfig()->getThumbnailsFolder();
 				break;
 			case 'cached':
-				$dir_target	= $config->getCachedFolder();
+				$dir_target	= Instance::getConfig()->getCachedFolder();
 				break;
 		}
 		return $dir_target . DIR_SEPARATOR . self::getCleanName( $pic->getRelativePathOnly() ) . '_' . self::getCleanName( $pic->getFileName() );
@@ -140,11 +140,11 @@ class ImageHelper extends ImageResizer
 	}
 
 	// Valid profiles: 'thumb', 'cached'
-	public static function resizeToProfile( $pic, $config, $profile = 'thumb' )
+	public static function resizeToProfile( $pic, $profile = 'thumb' )
 	{
 		$file_origin	= $pic->getPath();
 		$img_height		= $pic->getHeightByProfile( $profile );
-		$watermark		= $config->watermark;
+		$watermark		= Instance::getConfig()->watermark;
 		$file_target	= $pic->getProfilePath( $profile );
 		
 
@@ -154,17 +154,17 @@ class ImageHelper extends ImageResizer
 			switch( $profile )
 			{
 				case 'thumb':
-					$dir_target	= $config->getThumbnailsFolder();
+					$dir_target	= Instance::getConfig()->getThumbnailsFolder();
 					break;
 				case 'cached':
-					$dir_target	= $config->getCachedFolder();
+					$dir_target	= Instance::getConfig()->getCachedFolder();
 					break;
 			}
 			// Is this folder already created?
 			FileSystem::createFolderIfNotExist( $dir_target );
 
 			// Generate the thumbnail/cache
-			parent::resizeImage( $file_origin, self::getImageType( $pic ), $img_height, $waterMark, $config->image_quality, $file_target );
+			parent::resizeImage( $file_origin, self::getImageType( $pic ), $img_height, $waterMark, Instance::getConfig()->image_quality, $file_target );
 		}
 	}
 }

@@ -2,17 +2,16 @@
 /**
  * MiniGallery
  *
- * @author: xavier@arnaus.net
+ * @author: Xavier Arnaus Gil
  */
 
 define( 'BASE_DIR',				dirname(  __FILE__ ) );
 define( 'GALLERY_DIR',		'gallery_engine' );
 define( 'DIR_SEPARATOR',	'/' );
-define( 'FRAMEWORK_DIR',	GALLERY_DIR . DIR_SEPARATOR . 'framework' );
+define( 'ENVIRONMENT',		'DEVEL' );	// DEVEL | PRODUCTION
 
-require_once( BASE_DIR . DIR_SEPARATOR . FRAMEWORK_DIR . DIR_SEPARATOR . 'dispatcher.class.php' );
+require_once( BASE_DIR . DIR_SEPARATOR . GALLERY_DIR . DIR_SEPARATOR . 'bootstrap.php' );
 
-$dispatcher = new Dispatcher();
-$dispatcher->loadConfig( "default.config" );
-$dispatcher->run();
+$boot = new Bootstrap();
+$boot->init();
 ?>

@@ -11,16 +11,13 @@ class Element extends BaseClass
 		return $this->html_content;
 	}
 
-	public function __construct( Config $config, $item_to_parse = '' )
+	public function __construct( $item_to_parse = '' )
 	{
-		// Inyect the config.
-		$this->_config = $config;
-
 		// Generate the object.
 		$element = $this->getFile( $item_to_parse );
 
 		// Render the template
-		$this->html_content = ElementView::build( $element, $this->getConfig() );
+		$this->html_content = ElementView::build( $element );
 
 		unset($element);
 	}
@@ -46,26 +43,26 @@ class Element extends BaseClass
 		$pic->loadData( $image_properties );
 
 		// Calculate Thumb / Cached sizes
-		$thumb_cached_sizes = ImageHelper::getProportionalSizes( $pic, $this->getConfig() );
+		$thumb_cached_sizes = ImageHelper::getProportionalSizes( $pic );
 		$pic->loadData( $thumb_cached_sizes );
 
 		// Generate & Check / Point Thumb & Cache
 		$pic->loadData( array(
-			'thumb_path'	=> ImageHelper::generateProfilePaths( $pic, $this->getConfig(), 'thumb' ),
-			'cached_path'	=> ImageHelper::generateProfilePaths( $pic, $this->getConfig(), 'cached' )
+			'thumb_path'	=> ImageHelper::generateProfilePaths( $pic, 'thumb' ),
+			'cached_path'	=> ImageHelper::generateProfilePaths( $pic, 'cached' )
 		) );
-		ImageHelper::resizeToProfile( $pic, $this->getConfig(), 'thumb' );
-		ImageHelper::resizeToProfile( $pic, $this->getConfig(), 'cached' );
+		ImageHelper::resizeToProfile( $pic, 'thumb' );
+		ImageHelper::resizeToProfile( $pic, 'cached' );
 
 		// Add extra data
-		$url_data = Url::discoverPicUrls( $pic, $this->getConfig() );
+		$url_data = Url::discoverPicUrls( $pic );
 		$pic->loadData( array(
 			'url'									=> $url_data['url'],
 			'thumb_url'						=> $url_data['thumb_url'],
 			'cached_url'					=> $url_data['cached_url'],
 			'relative_url'				=> Url::getRelative( $image_properties['path'] ),
 			'relative_path_only'	=> Url::getRelativeWithoutFile( $image_properties['path'], $file_name ),
-			'url_access_name'			=> $this->getConfig()->url_item_name
+			'url_access_name'			=> Instance::getConfig()->url_item_name
 		) );
 
 		// --Write an XML?--

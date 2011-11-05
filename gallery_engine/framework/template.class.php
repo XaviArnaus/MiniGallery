@@ -20,8 +20,11 @@ class Template extends BaseClass
 
 	protected $is_index;
 
-	public function __construct( $template_name, $config, $is_index = false )
+	public function __construct( $template_name, $is_index = false )
 	{
+		// Adquire the config.
+		$config												= Instance::getConfig();
+		// Define a common separator.
 		$url_sep											= '/';
 		// Generate the properties.
 		$this->template_name					= $template_name;
