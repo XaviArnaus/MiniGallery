@@ -1,7 +1,4 @@
-<div id="social-content">
-	<div id="social-header">
-		<h2>Social Links</h2>
-	</div>
+<div id="footer-content">
 	<div class="column">
 		<h3>About MiniGallery</h3>
 		<ul>
