@@ -48,7 +48,7 @@ class ImageHelper extends ImageResizer
 		return $pieces[count($pieces)-1];
 	}
 
-	public static function getCleanName( $file_name, $for_slug = false )
+	public static function getCleanName( $file_name, $for_slug = false, $make_short = true )
 	{
 		// @todo: Remember that preg_replace is slower than str_replace!
 		$name = '';
@@ -58,11 +58,20 @@ class ImageHelper extends ImageResizer
 		}
 		else
 		{
-			// Cleaning to '-'
-			$name = preg_replace("/[^\w\.-]/", "-", strtolower(  $file_name ) );
-			// Too much '-' ?
-			$name = preg_replace("/[-]+/", "-", $name );
-			// Not at the begining.
+			// Strip the extension.
+			$name = $file_name;
+			if ( strpos( $name, '.' ) > 0 && '..' !== $name )
+			{
+				$name = substr( $name, 0, strrpos( $name, '.' ) );
+			}
+			// Cut too long names.
+			if ( strlen( $name ) > 20 )
+			{
+				$first = substr( $name, 0, 5 );
+				$last = substr( $name, strlen( $name ) - 5, 5 );
+				$name = $first . '...' . $last;
+			}
+			// Not dashes at the begining or end.
 			$name = preg_replace("/(^-|-$)/", "", $name );
 		}
 		return $name;
@@ -101,7 +110,7 @@ class ImageHelper extends ImageResizer
 				$dir_target	= Instance::getConfig()->getCachedFolder();
 				break;
 		}
-		return $dir_target . DIR_SEPARATOR . self::getCleanName( $pic->getRelativePathOnly() ) . '_' . self::getCleanName( $pic->getFileName() );
+		return $dir_target . DIR_SEPARATOR . self::getCleanName( $pic->getRelativePathOnly(), true ) . '_' . self::getCleanName( $pic->getFileName(), true );
 	}
 
 	public static function getImageType( $pic )

@@ -49,7 +49,7 @@ class Gallery extends BaseClass
 			// Pack Image Data.
 			$image_properties = array(
 				'path'					=> $file_item_path,
-				'title'					=> ImageHelper::getCleanName( $file_name ),
+				'title'					=> ImageHelper::getCleanName( $dir_name ),
 				'filename'			=> $dir_name
 			);
 

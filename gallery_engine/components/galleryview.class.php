@@ -53,7 +53,7 @@ class GalleryView extends BaseClass
 
 		// Assignments.
 		$pic_template->assign( 'item_url', Url::itemLink( $item ) );
-		$pic_template->assign( 'thumb_name', $item->getSlug() );
+		$pic_template->assign( 'thumb_name', $item->getTitle() );
 		$pic_template->assign( 'thumb_src', $item->getThumbUrl() );
 		$pic_template->assign( 'item-type', 'element' );
 
@@ -71,13 +71,13 @@ class GalleryView extends BaseClass
 		$pic_template = new Template( 'gallery_item' );
 
 		// Assignments.
-		$slug = $item->getSlug();
-		if ( '' === $slug )
+		$title = $item->getTitle();
+		if ( '' === $title )
 		{
 			$slug = '..';
 		}
 		$pic_template->assign( 'item_url', Url::itemLink( $item ) );
-		$pic_template->assign( 'thumb_name', $slug );
+		$pic_template->assign( 'thumb_name', $title );
 		$pic_template->assign( 'thumb_src', $item->getIconUrl() );
 		$pic_template->assign( 'item-type', 'folder' );
 

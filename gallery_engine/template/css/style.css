@@ -210,6 +210,10 @@ body {
 {
 	padding: 1px;
 }
+.gallery-item a
+{
+	text-decoration: none;
+}
 .gallery-item img.element
 {
 	border: 1px solid white;
@@ -217,7 +221,7 @@ body {
 .gallery-item img.folder
 {
 	margin-top: 10px;
-	width:128px;
+	width:100px;
 }
 
 .element-container
@@ -239,6 +243,12 @@ body {
 	border: 1px solid white;
 	padding: 1px;
 	max-width:800px;
+}
+
+.element-item p
+{
+	font-size: 12pt;
+	color: #cccccc;
 }
 
 .back-to-gallery
@@ -326,7 +336,8 @@ body {
 .element-info table td
 {
 	padding: 5px;
-	color: white;
+	color: #cccccc;
+	font-size: 10pt;
 }
 
 #footer-content

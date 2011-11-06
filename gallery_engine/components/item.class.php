@@ -82,7 +82,7 @@ class Item
 	{
 		if ( is_null( $this->relative_path_only) )
 		{
-			$this->relative = Url::getRelativeWithoutFile( $this->path, $this->filename );
+			$this->relative_path_only = Url::getRelativeWithoutFile( $this->path, $this->filename );
 		}
 		return $this->relative_path_only;
 	}

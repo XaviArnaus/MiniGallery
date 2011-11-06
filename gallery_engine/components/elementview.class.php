@@ -27,7 +27,7 @@ class ElementView extends BaseClass
 
 		// Assignments.
 		$pic_template->assign( 'item_url', Url::itemLink( $item ) );
-		$pic_template->assign( 'element_name', ( $use_thumb ? '' : $item->getSlug() ) );
+		$pic_template->assign( 'element_name', ( $use_thumb ? '' : $item->getTitle() ) );
 		$pic_template->assign( 'element_src', ( $use_thumb ? $item->getThumbUrl() : $item->getCachedUrl() ) );
 
 		// Fetch and destroy the template object.

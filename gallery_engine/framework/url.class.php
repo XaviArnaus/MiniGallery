@@ -7,7 +7,7 @@ class Url extends BaseClass
 	public static function itemLink( $item )
 	{
 		$_url	= $item->getRealUrl( true );
-		$url	= Instance::getConfig()->gallery_url . ( '' === $_url ? '' : $item->getUrlAccessName() . $_url );
+		$url	= Instance::getConfig()->gallery_url . ( '/' === $_url ? '' : $item->getUrlAccessName() . $_url );
 		return $url;
 	}
 
@@ -41,9 +41,9 @@ class Url extends BaseClass
 	public static function getRelativeWithoutFile( $path, $filename )
 	{
 		// Convert absolute to relative.
-		$path = self::getRelative( $path );
+		$path	= self::getRelative( $path );
 		// Get only the relative path
-		$pos = strpos( $path, $filename );
+		$pos	= strpos( $path, $filename );
 		return substr( $path, 0, - ( strlen( $filename ) ) );
 	}
 
