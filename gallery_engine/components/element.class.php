@@ -28,21 +28,37 @@ class Element extends BaseClass
 	 */
 	protected function getExtraData( $element )
 	{
-		// We need to be able to return to the gallery.
+		// We need to create a folder object be able to return to the gallery.
 		$folder = new Folder();
 		$folder->loadData( array(	// Only basic data to be able to create links.
 			'path'							=> Url::refillRelativePath( $element->getRelativePathOnly() ),
 			'url_access_name'		=> Instance::getConfig()->url_folder_name,
 			'relative_url'			=> $element->getRelativePathOnly(),
 		) );
-
+		// Discover the siblings.
+		$siblings		= $this->getSiblings( $element );
+		// Get the prev & next from the siblings.
+		$nav				= $this->getPrevNext( $siblings );
+		// Build the extra_data.
 		$extra_data = array(
 			'back_url'					=> Url::itemLink( $folder ),
 			'back_icon_src'			=> Url::discoverUrl( Instance::getConfig()->gallery_path . DIR_SEPARATOR .
 														Instance::getConfig()->gallery_folder . DIR_SEPARATOR .
 														Instance::getConfig()->template_folder . DIR_SEPARATOR .
-														Instance::getConfig()->template_images_folder . DIR_SEPARATOR . 'back.png' ),
+														Instance::getConfig()->template_icons_folder . DIR_SEPARATOR . 'Up.png' ),
 			'back_text'					=> $element->getRelativePathOnly(),
+			'prev_style'				=> ( !is_null( $nav['prev'] ) ? '' : 'style="display:none;"' ),
+			'prev_url'					=> ( !is_null( $nav['prev'] ) ? Url::itemLink( $nav['prev'] ) : '' ),
+			'prev_icon_src'			=> Url::discoverUrl( Instance::getConfig()->gallery_path . DIR_SEPARATOR .
+														Instance::getConfig()->gallery_folder . DIR_SEPARATOR .
+														Instance::getConfig()->template_folder . DIR_SEPARATOR .
+														Instance::getConfig()->template_icons_folder . DIR_SEPARATOR . 'Previous.png' ),
+			'next_style'				=> ( !is_null( $nav['next'] ) ? '' : 'style="display:none;"' ),
+			'next_url'					=> ( !is_null( $nav['next'] ) ? Url::itemLink( $nav['next'] ) : '' ),
+			'next_icon_src'			=> Url::discoverUrl( Instance::getConfig()->gallery_path . DIR_SEPARATOR .
+														Instance::getConfig()->gallery_folder . DIR_SEPARATOR .
+														Instance::getConfig()->template_folder . DIR_SEPARATOR .
+														Instance::getConfig()->template_icons_folder . DIR_SEPARATOR . 'Next.png' ),
 			'siblings'					=> $this->getSiblings( $element ),
 			'element_full_url'	=> $element->getRealUrl(),
 			'element_width'			=> $element->getWidth(),
@@ -50,6 +66,24 @@ class Element extends BaseClass
 		);
 
 		return $extra_data;
+	}
+
+	protected function getPrevNext( $siblings )
+	{
+		$result = array(
+			'prev'	=> null,
+			'next'	=> null
+		);
+		if ( count( $siblings['before'] ) > 0 )
+		{
+			$result['prev']= $siblings['before'][ count( $siblings['before'] ) - 1 ];
+		}
+		if ( count( $siblings['after'] ) > 0 )
+		{
+			// Remember that we ordered this at reverse!
+			$result['next']= $siblings['after'][ count( $siblings['after'] ) - 1 ];
+		}
+		return $result;
 	}
 
 	protected function getSiblings( $element, $number_of_siblings_per_side = 2 )

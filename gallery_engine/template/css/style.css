@@ -217,6 +217,7 @@ body {
 .gallery-item img.folder
 {
 	margin-top: 10px;
+	width:128px;
 }
 
 .element-container
@@ -242,24 +243,68 @@ body {
 
 .back-to-gallery
 {
-	float: left;
-	clear: both;
+	float:left;
+	width:780px;
+	text-align: center;
 }
 .back-to-gallery a
 {
 	text-decoration: none;
 	cursor: hand;
 }
-.back-to-gallery a img.back-icon
+.back-to-gallery a img.icon
+{
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+	display: inline;
+}
+.back-to-gallery a span
+{
+	font-size: 9pt;
+	display: inline;
+}
+.prev-item
+{
+	float:left;
+}
+.prev-item a
+{
+	text-decoration: none;
+	cursor: hand;
+}
+.prev-item a img.icon
 {
 	width: 30px;
 	height: 30px;
 	vertical-align: middle;
 }
-.back-to-gallery a p
+.prev-item a p
 {
 	display: inline;
 }
+.next-item
+{
+	float:right;
+}
+.next-item a
+{
+	text-decoration: none;
+	cursor: hand;
+}
+.next-item a img.icon
+{
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
+.next-item a p
+{
+	display: inline;
+}
+
+
+
 .siblings-before .element-item
 {
 	float:left;

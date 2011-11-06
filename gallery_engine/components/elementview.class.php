@@ -10,7 +10,8 @@ class ElementView extends BaseClass
 		$template = new Template( 'element' );
 
 		// Assignments.
-		$template->assign( 'content', self::getPicOutput( $pic_data, $extra_data ) );
+		$template->assign( 'navbar_content', self::getNavbarOutput( $extra_data ) );
+		$template->assign( 'content', self::getPicOutput( $pic_data ) );
 		$template->assign( 'extra_content', self::getExtraOutput( $extra_data ) );
 
 		// Fetch and destroy the template object.
@@ -19,7 +20,7 @@ class ElementView extends BaseClass
 		return $output;
 	}
 
-	protected static function getPicOutput( $item, $extra_data = null, $use_thumb = false )
+	protected static function getPicOutput( $item, $use_thumb = false )
 	{
 		// Create a template object
 		$pic_template = new Template( ( $use_thumb ? 'element_extradata_item' : 'element_item' ) );
@@ -28,22 +29,34 @@ class ElementView extends BaseClass
 		$pic_template->assign( 'item_url', Url::itemLink( $item ) );
 		$pic_template->assign( 'element_name', ( $use_thumb ? '' : $item->getSlug() ) );
 		$pic_template->assign( 'element_src', ( $use_thumb ? $item->getThumbUrl() : $item->getCachedUrl() ) );
-		if ( is_null( $extra_data ) )
-		{
-			$pic_template->assign( 'back_class', 'style="display:none;"' );
-		}
-		else
-		{
-			$pic_template->assign( 'back_class', '' );
-			$pic_template->assign( 'back_url', $extra_data['back_url'] );
-			$pic_template->assign( 'back_icon_src', $extra_data['back_icon_src'] );
-			$pic_template->assign( 'back_text', $extra_data['back_text'] );
-		}
+
 		// Fetch and destroy the template object.
 		$output = $pic_template->fetch();
 		unset( $pic_template );
 
 		// Return
+		return $output;
+	}
+
+	protected static function getNavbarOutput( $extra_data )
+	{
+		// Create a template object
+		$template = new Template( 'navbar' );
+
+		// Assignments.
+		$template->assign( 'back_url', $extra_data['back_url'] );
+		$template->assign( 'back_icon_src', $extra_data['back_icon_src'] );
+		$template->assign( 'back_text', $extra_data['back_text'] );
+		$template->assign( 'prev_style', $extra_data['prev_style'] );
+		$template->assign( 'prev_url', $extra_data['prev_url'] );
+		$template->assign( 'prev_icon_src', $extra_data['prev_icon_src'] );
+		$template->assign( 'next_style', $extra_data['next_style'] );
+		$template->assign( 'next_url', $extra_data['next_url'] );
+		$template->assign( 'next_icon_src', $extra_data['next_icon_src'] );
+
+		// Fetch and destroy the template object.
+		$output = $template->fetch();
+
 		return $output;
 	}
 
@@ -58,7 +71,7 @@ class ElementView extends BaseClass
 			$content[$sibling_pos] = '';
 			foreach( $data as $sibling )
 			{
-				$content[$sibling_pos].= self::getPicOutput( $sibling, null, true );
+				$content[$sibling_pos].= self::getPicOutput( $sibling, true );
 			}
 		}
 

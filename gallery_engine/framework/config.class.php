@@ -14,6 +14,7 @@ class Config
 	public $gallery_folder					= 'gallery_engine';		// Where we'll store all the generated content.
 	public $template_folder					= 'template';
 	public $template_images_folder	= 'images';
+	public $template_icons_folder		= 'icons';
 	public $template_css_folder			= 'css';
 	public $template_js_folder			= 'js';
 	public $gallery_thumbs_folder		= 'thumbs';

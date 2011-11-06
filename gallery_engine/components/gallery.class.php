@@ -61,7 +61,7 @@ class Gallery extends BaseClass
 			$icon_path	= Instance::getConfig()->gallery_path . DIR_SEPARATOR .
 										Instance::getConfig()->gallery_folder . DIR_SEPARATOR .
 										Instance::getConfig()->template_folder . DIR_SEPARATOR .
-										Instance::getConfig()->template_images_folder . DIR_SEPARATOR . 'folder.png';
+										Instance::getConfig()->template_icons_folder . DIR_SEPARATOR . 'Folder.png';
 			$url_data		= Url::discoverPicUrls( $folder );
 			$folder->loadData( array(
 				'url'									=> $url_data['url'],
