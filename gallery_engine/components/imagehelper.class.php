@@ -65,7 +65,7 @@ class ImageHelper extends ImageResizer
 				$name = substr( $name, 0, strrpos( $name, '.' ) );
 			}
 			// Cut too long names.
-			if ( strlen( $name ) > 20 )
+			if ( $make_short && strlen( $name ) > 20 )
 			{
 				$first = substr( $name, 0, 5 );
 				$last = substr( $name, strlen( $name ) - 5, 5 );
